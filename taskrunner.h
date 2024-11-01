@@ -8,7 +8,6 @@
 #include <chrono>
 
 #include "sharedqueue.h"
-#include "utils_export.h"
 
 using namespace std::chrono_literals;
 
