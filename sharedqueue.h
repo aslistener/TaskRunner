@@ -1,7 +1,6 @@
 #ifndef SHAREDQUEUE_H
 #define SHAREDQUEUE_H
 
-/// #include "utils_export.h"
 #include <mutex>
 #include <queue>
 #include <atomic>
@@ -13,7 +12,7 @@ class SharedQueue
 {
 public:
     SharedQueue() {
-        /// m_chunkSize.store(5);
+        m_chunkSize.store(5);
     }
 
     ~SharedQueue() {
@@ -31,8 +30,7 @@ public:
     void PopChunk(std::vector<T> &);
 
     void SetChunkSize(int size) {
-        /// m_chunkSize.store(size);
-        m_chunkSize = (size);
+        m_chunkSize.store(size);
     }
 
     void Clear() {
@@ -42,9 +40,7 @@ public:
     }
 
     int GetChunkSize() {
-        return m_chunkSize;
-
-        /// m_chunkSize.load();
+        return m_chunkSize.load();
     }
 
     bool TryPop(T &t) {
@@ -74,8 +70,7 @@ public:
 private:
     std::mutex m_mutex;
     std::queue<T> m_queue;
-/////    std::atomic_int m_chunkSize;
-    int m_chunkSize = 5;
+    std::atomic_int m_chunkSize;
 };
 
 template<typename T>
@@ -129,7 +124,7 @@ std::vector<T> SharedQueue<T>::PopChunk()
         vecSize = (GetChunkSize() < (int)m_queue.size() ?
                        GetChunkSize() : (int)m_queue.size());
         if(vecSize > 0) {
-         /////   chunk.reserve(vecSize);
+            chunk.reserve(vecSize);
             for(int i = 0; i < GetChunkSize() && !m_queue.empty(); i++) {
              chunk.emplace_back( m_queue.front());
                 m_queue.pop();
